@@ -56,17 +56,17 @@ def predict_image(image_path, model):
 
 # 主函数
 def main():
-    # # 读取测试集的CSV文件
-    # test_csv_file = 'test\_classes.csv'  # 替换为您的测试集CSV文件路径
-    # test_data = pd.read_csv(test_csv_file)
+    # 读取测试集的CSV文件
+    test_csv_file = 'test/_classes.csv'  # 替换为您的测试集CSV文件路径
+    test_data = pd.read_csv(test_csv_file)
 
-    # # 随机选择一个图片
-    # random_index = random.randint(0, len(test_data) - 1)
-    # image_filename = test_data.iloc[random_index, 0]
-    # actual_labels = test_data.iloc[random_index, 1:].values
-    # image_path = os.path.join('test', image_filename)  # 替换为您的测试图片文件夹路径
+    # 随机选择一个图片
+    random_index = random.randint(0, len(test_data) - 1)
+    image_filename = test_data.iloc[random_index, 0]
+    actual_labels = test_data.iloc[random_index, 1:].values
+    image_path = os.path.join('test', image_filename)  # 替换为您的测试图片文件夹路径
 
-    image_path = '2icu0b1h67hatu9s0bqz0o9o5_0.jpg'
+    #image_path = '2icu0b1h67hatu9s0bqz0o9o5_0.jpg'
 
     # 加载模型
     model = load_model()
@@ -75,7 +75,7 @@ def main():
     prediction = predict_image(image_path, model)
 
     # 打印实际类别和预测类别
-    # print(f'Actual labels: {actual_labels}')
+    print(f'Actual labels: {actual_labels}')
     print(f'Predicted class: {prediction}')
 
 if __name__ == '__main__':
