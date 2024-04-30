@@ -1,8 +1,8 @@
-import torch
-import torchvision
-from torchvision import transforms
-from PIL import Image
-import pandas as pd
+import torch 
+import torchvision 
+from torchvision import transforms 
+from PIL import Image 
+import pandas as pd 
 import random
 import os
 
