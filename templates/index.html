@@ -2,14 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Prediction</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana Classification</title>
+    <style>
+        #resultContainer {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+        }
+
+        #result canvas {
+            max-width: 500px;
+            max-height: 700px;
+        }
+
+        #resultText {
+            margin-left: auto;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Upload an image for prediction</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*">
-        <input type="submit" value="Upload">
-    </form>
+<h1>Banana Classification</h1>
+<input type="file" id="fileInput" accept="image/*">
+<button id="predictButton">Predict</button>
+<div id="resultContainer" style="width: 80%">
+    <canvas id="imageCanvas"></canvas>
+    <div id="resultText" style="font-size: 72px"></div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const predictButton = document.getElementById('predictButton');
+    const resultText = document.getElementById('resultText');
+    const imageCanvas = document.getElementById('imageCanvas');
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const image = new Image();
+            image.src = event.target.result;
+            image.onload = function () {
+                const maxWidth = 500;
+                const maxHeight = 700;
+                let width = image.width;
+                let height = image.height;
+                if (width > maxWidth || height > maxHeight) {
+                    if (width / maxWidth > height / maxHeight) {
+                        width = maxWidth;
+                        height = Math.round(maxWidth * image.height / image.width);
+                    } else {
+                        height = maxHeight;
+                        width = Math.round(maxHeight * image.width / image.height);
+                    }
+                }
+                imageCanvas.width = width;
+                imageCanvas.height = height;
+                const context = imageCanvas.getContext('2d');
+                context.drawImage(image, 0, 0, width, height);
+            };
+        };
+        reader.readAsDataURL(file);
+    });
+
+    predictButton.addEventListener('click', async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+            alert('Please select an image file.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        resultText.innerText = data;
+    });
+</script>
 </body>
 </html>

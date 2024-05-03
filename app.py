@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template,jsonify
 from PIL import Image
 import torch
 import torchvision
@@ -57,7 +57,7 @@ def predict_image(image_path, model):
     return predicted.item()
 
 # 主函数
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/predict', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -80,7 +80,7 @@ def index():
             prediction = predict_image(image_path, model)
             predicted_class = ['freshripe', 'freshunripe', 'overripe', 'ripe', 'rotten', 'unripe'][prediction]
             # 返回预测结果
-            return f'Predicted class: {predicted_class}'
+            return jsonify(f'Predicted class: {predicted_class}')
     return render_template('index.html')
 
 if __name__ == '__main__':
